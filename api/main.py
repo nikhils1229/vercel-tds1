@@ -4,8 +4,6 @@ import json
 from typing import List
 
 app = FastAPI()
-
-# Enable CORS for all origins and GET requests
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,7 +11,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load marks data from marks.json
 with open("marks.json") as f:
     marks_list = json.load(f)
 marks_data = {entry["name"]: entry["marks"] for entry in marks_list}
