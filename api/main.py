@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query, Response
+from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from typing import List
@@ -13,11 +13,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load marks from marks.json (should be a list of dicts with "name" and "marks")
+# Load marks data from marks.json
 with open("marks.json") as f:
     marks_list = json.load(f)
 marks_data = {entry["name"]: entry["marks"] for entry in marks_list}
 
 @app.get("/api")
-def get_marks(name: List[str] = Query(...)):
-    return {"marks": [marks_data.get(n, None) for n in name]}
+def get_marks(name: List[str] = Query(None)):
+    if name:
+        return {"marks": [marks_data.get(n, None) for n in name]}
+    return {"marks": list(marks_data.values())}
